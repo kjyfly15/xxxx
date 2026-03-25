@@ -12,6 +12,7 @@
     "electron": "electron .",
     "electron-dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron-build": "npm run build && electron-builder",
+    "electron-build-win": "npm run build && electron-builder -w",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -40,12 +41,22 @@
     ],
     "win": {
       "target": [
+        "portable",
         "nsis"
-      ]
+      ],
+      "certificateFile": null,
+      "certificatePassword": null
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerIcon": null,
+      "uninstallerIcon": null
+    },
+    "portable": {
+      "artifactName": "제조대기자현황판-${version}.exe"
     }
   },
   "devDependencies": {

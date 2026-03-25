@@ -18,28 +18,63 @@ Windows 컴퓨터에 설치하여 사용할 수 있는 제조 대기자 관리 �
 
 ## 💾 설치 방법
 
-### 1단계: 저장소 클론
+### Windows에서 설치 프로그램 생성
+
+**Windows가 설치된 컴퓨터에서:**
+
+#### 방법 1: 배치 파일 사용 (가장 간단)
+1. 프로젝트 폴더에서 `build-windows.bat` 더블클릭
+2. 화면의 지시에 따라 빌드 타입 선택
+3. 자동으로 `dist/` 폴더가 열립니다
+
+#### 방법 2: PowerShell 사용
+```powershell
+# PowerShell에서 실행 정책 변경 (첫 실행 시만)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# 빌드 스크립트 실행
+.\build-windows.ps1
+```
+
+#### 방법 3: 수동 명령어
 ```bash
+# 1. Node.js 설치 확인
+node --version
+
+# 2. 의존성 설치
+npm install
+
+# 3. Portable 버전 빌드 (추천)
+npm run build && npx electron-builder -w --config.win.target=portable
+
+# 또는 설치 프로그램 버전
+npm run build && npx electron-builder -w --config.win.target=nsis
+```
+
+자세한 방법은 **[BUILD_WINDOWS.md](./BUILD_WINDOWS.md)** 참고
+
+### 빌드 결과
+- **Portable 버전**: `제조대기자현황판-1.0.0.exe` (약 200MB)
+  - 클릭하면 바로 실행
+  - 설치 과정 없음
+
+- **NSIS 설치 프로그램**: `제조대기자 현황판 AI Setup 1.0.0.exe` (약 150MB)
+  - 전통적인 설치 마법사
+  - 시작 메뉴 바로가기 생성
+
+### 개발 환경에서 테스트
+
+```bash
+# 1단계: 저장소 클론
 git clone <repository-url>
 cd manufacturing-queue-board-ai
-```
 
-### 2단계: 의존성 설치
-```bash
+# 2단계: 의존성 설치
 npm install
-```
 
-### 3단계: 개발 환경에서 실행
-```bash
+# 3단계: 개발 서버 + Electron 실행
 npm run electron-dev
 ```
-
-### 4단계: 설치 파일 빌드
-```bash
-npm run electron-build
-```
-
-빌드 완료 후 `dist/` 폴더에서 Windows 설치 파일(.exe)을 찾을 수 있습니다.
 
 ## 📖 사용 방법
 
