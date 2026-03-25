@@ -22,45 +22,45 @@ Windows 컴퓨터에 설치하여 사용할 수 있는 제조 대기자 관리 �
 
 **Windows가 설치된 컴퓨터에서:**
 
-#### 방법 1: 배치 파일 사용 (가장 간단)
-1. 프로젝트 폴더에서 `build-windows.bat` 더블클릭
-2. 화면의 지시에 따라 빌드 타입 선택
-3. 자동으로 `dist/` 폴더가 열립니다
+자세한 방법은 **[QUICK_START.md](./QUICK_START.md)** 참고
 
-#### 방법 2: PowerShell 사용
-```powershell
-# PowerShell에서 실행 정책 변경 (첫 실행 시만)
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+### macOS에서 설치 프로그램 생성
 
-# 빌드 스크립트 실행
-.\build-windows.ps1
-```
+**Mac이 설치된 컴퓨터에서:**
 
-#### 방법 3: 수동 명령어
+#### 방법 1: 자동 빌드 (추천)
 ```bash
-# 1. Node.js 설치 확인
-node --version
-
-# 2. 의존성 설치
-npm install
-
-# 3. Portable 버전 빌드 (추천)
-npm run build && npx electron-builder -w --config.win.target=portable
-
-# 또는 설치 프로그램 버전
-npm run build && npx electron-builder -w --config.win.target=nsis
+./quick-build.sh
 ```
 
-자세한 방법은 **[BUILD_WINDOWS.md](./BUILD_WINDOWS.md)** 참고
+#### 방법 2: 수동 빌드
+```bash
+chmod +x quick-build.sh     # 첫 실행 시만
+./quick-build.sh
+```
+
+#### 방법 3: 명령어로 빌드
+```bash
+npm install
+npm run build
+npx electron-builder -m
+```
+
+생성되는 파일:
+- **DMG**: `제조대기자 현황판 AI-1.0.0.dmg` (설치 관리자)
+- **ZIP**: `제조대기자 현황판 AI-1.0.0.zip` (압축 파일)
+
+자세한 방법은 **[QUICK_START_MAC.md](./QUICK_START_MAC.md)** 참고
 
 ### 빌드 결과
-- **Portable 버전**: `제조대기자현황판-1.0.0.exe` (약 200MB)
-  - 클릭하면 바로 실행
-  - 설치 과정 없음
 
-- **NSIS 설치 프로그램**: `제조대기자 현황판 AI Setup 1.0.0.exe` (약 150MB)
-  - 전통적인 설치 마법사
-  - 시작 메뉴 바로가기 생성
+#### Windows
+- **Portable**: `제조대기자현황판-1.0.0.exe` (~200MB)
+- **NSIS 설치**: `제조대기자 현황판 AI Setup 1.0.0.exe` (~150MB)
+
+#### macOS
+- **DMG**: `제조대기자 현황판 AI-1.0.0.dmg` (~200MB)
+- **ZIP**: `제조대기자 현황판 AI-1.0.0.zip` (~100MB)
 
 ### 개발 환경에서 테스트
 
