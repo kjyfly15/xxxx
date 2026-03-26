@@ -1,0 +1,103 @@
+name: Build Installers
+
+on:
+  push:
+    branches:
+      - main
+      - claude/ai-manufacturing-queue-board-sK3Sa
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Build macOS app
+        if: runner.os == 'macOS'
+        run: npx electron-builder -m
+
+      - name: Build Windows app
+        if: runner.os == 'Windows'
+        run: npx electron-builder -w --config.win.target=portable
+
+      - name: Upload macOS artifacts
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-app
+          path: |
+            dist/*.dmg
+            dist/*.zip
+
+      - name: Upload Windows artifacts
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-app
+          path: |
+            dist/*.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            macos-app/*.dmg
+            macos-app/*.zip
+            windows-app/*.exe
+          tag_name: v1.0.0
+          release_name: Release v1.0.0
+          body: |
+            # 제조대기자 현황판 AI v1.0.0
+
+            ## 다운로드
+
+            ### macOS
+            - `제조대기자 현황판 AI-1.0.0.dmg` - 설치 프로그램 (권장)
+            - `제조대기자 현황판 AI-1.0.0.zip` - 압축 파일
+
+            ### Windows
+            - `제조대기자현황판-1.0.0.exe` - Portable 버전
+
+            ## 설치 방법
+
+            ### macOS
+            1. DMG 파일 다운로드
+            2. 더블클릭하여 설치 창 열기
+            3. 앱 아이콘을 Applications 폴더로 드래그
+            4. Launchpad에서 실행
+
+            ### Windows
+            1. EXE 파일 다운로드
+            2. 더블클릭하여 실행
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
