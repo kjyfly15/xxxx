@@ -1,7 +1,7 @@
 {
-  "name": "manufacturing-queue-board-ai",
+  "name": "flashcard-vocabulary-app",
   "version": "1.0.0",
-  "description": "제조대기자 현황판 AI 애플리케이션",
+  "description": "플래시카드 단어장 앱",
   "main": "public/electron.js",
   "homepage": "./",
   "author": "",
